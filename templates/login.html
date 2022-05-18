@@ -1,0 +1,76 @@
+{% extends "main_template.html" %}
+{% block title %}
+    <title>Login</title>
+{% endblock %}
+
+
+
+{% block content %}
+    <div class="mdc-card mdc-elevation--z3 login-center  mdc-card--outlined">
+
+
+        <form action="/login_sucess" method="post">
+            <div class="row">
+                <img src="/static/favicon.png" width="200px" class="company-logo">
+            </div>
+            <div class="row">
+                <div class="center-email-login">
+                    <div class="mdc-text-field mdc-text-field--outlined email mText">
+                        <input class="mdc-text-field__input" name="username" id="text-field-hero-input" type="username">
+                        <div class="mdc-notched-outline">
+                            <div class="mdc-notched-outline__leading"></div>
+                            <div class="mdc-notched-outline__notch">
+                                <label for="text-field-hero-input" class="mdc-floating-label">Username</label>
+                            </div>
+                            <div class="mdc-notched-outline__trailing"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="center-pass">
+                    <div class="mdc-text-field mdc-text-field--outlined pass mText">
+                        <input class="mdc-text-field__input" name="pass" id="text-field-hero-input" type="password">
+                        <div class="mdc-notched-outline">
+                            <div class="mdc-notched-outline__leading"></div>
+                            <div class="mdc-notched-outline__notch">
+                                <label for="text-field-hero-input" class="mdc-floating-label">Password</label>
+                            </div>
+                            <div class="mdc-notched-outline__trailing"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div style="margin-left: auto;  margin-bottom: 20px; margin-right: auto;">
+                    <button class="mdc-button mdc-button--outlined loginbtn"><span class="mdc-button__ripple"></span>
+                        Login In
+                    </button>
+
+
+                </div>
+            </div>
+        </form>
+
+
+        <form style="background-color: rgb(255, 145, 125); border-bottom-left-radius: 1rem;border-bottom-right-radius: 1rem; text-align: center;"
+              action="/register">
+            <button class="mdc-button ">
+                <div class="mdc-button__ripple"></div>
+                <span class="mdc-button__label" style="color:rgb(255, 41, 41); margin: 5px;">Don't have a account? Register</span>
+            </button>
+        </form>
+
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        mdc.textField.MDCTextField.attachTo(document.querySelector('.email'));
+        mdc.textField.MDCTextField.attachTo(document.querySelector('.pass'));
+        mdc.textField.MDCTextField.attachTo(document.querySelector('.name'));
+    </script>
+
+{% endblock %}

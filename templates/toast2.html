@@ -1,0 +1,38 @@
+{% extends "main_template.html" %}
+
+{% block title %}
+
+    <title> @.Me | Books | {{ message_title }} </title>
+{% endblock %}
+
+{% block content %}
+
+    {% if error == "True" %}
+
+        <div class="alert alert-danger" role="alert">
+            {{ message_body }} <a href="{{ url_for('index') }}">Redirect to Homepage</a>
+        </div>
+
+    {% else %}
+
+        <div class="alert alert-success" role="alert">
+            {{ message_body }} <a href="{{ url_for('index') }}">Redirect to Homepage</a>
+
+
+            {% if REDIRECT == "True" %}
+
+                <script>
+                    setTimeout(function () {
+                        window.location = "{{url_for('index')}}";
+                    }, 2000);
+                </script>
+            {% endif %}
+
+        </div>
+    {% endif %}
+
+
+
+
+
+{% endblock %}

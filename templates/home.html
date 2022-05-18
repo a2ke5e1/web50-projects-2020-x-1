@@ -1,0 +1,175 @@
+{% extends "main_template.html" %}
+{% block title %}
+    <title>@.Me| Books </title>
+    <style>
+        .grid {
+            background-color: transparent;
+            margin: 20px;
+            display: grid;
+            padding: 2px;
+            grid-column-gap: 5px;
+            grid-row-gap: 10px;
+            grid-template-columns: auto auto auto;
+        }
+        .grid-item {
+            border-radius: 0.25rem;
+            font-size: 20px;
+            padding: 30px;
+            text-align: center;
+        }
+        .book_cards {
+            width: fit-content;
+            min-width: 20vw;
+            margin-left: auto;
+            margin-right: auto;
+            border-color: transparent;
+            color: rgb(107, 8, 8);
+            border-radius: 2px;
+            background-color: rgba(255, 144, 125, 0.849) !important;
+            padding: 10px;
+            margin: 5px;
+        }
+        @media screen and (min-width: 1000px) and (max-width: 1500px) {
+            .grid {
+                grid-template-columns: auto auto;
+            }
+
+        }
+        @media screen and (max-width: 1000px) {
+            .grid {
+                grid-template-columns: auto;
+            }
+            .book_cards {
+                min-width: 100%;
+            }
+        }
+    </style>
+{% endblock %}
+{% block content %}
+    <div style="margin-top: 20px; margin-left: 15px;" class="container-fluid">
+        <div class="row">
+            <div class="col-5">
+                <h1>@.Me | Books</h1>
+            </div>
+            <div class="col-3">
+                {% if l == True %}
+                    <form action="/login" style="text-align:right; margin-right: 15px;">
+                        <h6 style="margin-top: 5px; margin-right: 10px ;margin-bottom: -5px;">Welcome! {{ name }}</h6>
+                        <button class="mdc-button" style="color: red;"><span class="mdc-button__ripple"></span> Logout
+                        </button>
+                    </form>
+                {% else %}
+                    <form action="/login" style="text-align:right; margin-right: 15px;">
+                        <h6 style="margin-top: 5px; margin-right: 10px ;margin-bottom: -5px;">Welcome! user</h6>
+                        <button class="mdc-button" style="color: red;"><span class="mdc-button__ripple"></span> Login
+                        </button>
+                    </form>
+                {% endif %}
+            </div>
+            <div class="col-3">
+                <div style="margin-left: -30px;">
+                    <form action="/" method="POST">
+                        <label class="mdc-text-field mdc-text-field--outlined mdc-text-field--no-label">
+                            <input class="mdc-text-field__input" type="text" name="search" value="{{ m_input }}"
+                                   aria-label="Label">
+                            <button class="mdc-icon-button material-icons" style="margin-top: 5px;">search</button>
+                            <div class="mdc-notched-outline">
+                                <div class="mdc-notched-outline__leading"></div>
+                                <div class="mdc-notched-outline__trailing"></div>
+                            </div>
+                        </label>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if search_request==False %}
+        <div style="margin-left: 25px;">
+            <div class="container-fluid">
+                <div class="row">
+                    {% if b > 51 %}
+                        <form action="{{ url_for('index_range', a=a-50, b=b-50 ) }}" method="POST">
+                            <button class="mdc-icon-button material-icons">keyboard_arrow_left</button>
+                        </form>
+                    {% endif %}
+                    <a style="margin-top:13px;"> {{ a }} - {{ b }} out of 5000</a>
+                    <form action="{{ url_for('index_range', a=a+50, b=b+50 )}}" method="POST">
+                        <button class="mdc-icon-button material-icons">keyboard_arrow_right</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+    <div class="grid">
+        {% for book in books %}
+            <div class="gird-item">
+                <form action="{{ url_for('book_view', isbn__= book.isbn ) }}">
+                    <div class="mdc-card mdc-elevation--z0 mdc-card--outlined container-fluid book_cards">
+                        <div class="row" style="margin-left: 5px"><b>Title </b></div>
+                        <div class="row" style="margin-left: 5px;">{{ book.title }}</div>
+                        <div class="row" style="margin-left: 5px"><b>Author </b></div>
+                        <div class="row" style="margin-left: 5px;">{{ book.author }}</div>
+                        <div class="row" style="margin-left: 5px"><b>Year Published </b></div>
+                        <div class="row" style="margin-left: 5px;">{{ book.year }}</div>
+                        <div class="row" style="margin-top: 20px;">
+                            {% if book.rate == None %}
+                                {% for l in  mGoodData %}
+                                    {% if book.isbn == l['isbn'] %}
+                                        <a style="margin-left: 20px; margin-top: 3%;"><b>No Review | Goodbook's
+                                            Score </b>{{ l['average_rating'] }}</a>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                {% for l in  mGoodData %}
+                                    {% if book.isbn == l['isbn'] %}
+                                        <a style="margin-left: 20px; margin-top: 3%;"><b>Rating</b> {{ "%.2f"|format(book.rate) }}/5
+                                            <b> | Goodbook's Score </b>{{ l['average_rating'] }}</a>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                            <button class="col-1 mdc-button"
+                                    style="background-color: red; color: white; margin-left: auto; margin-right: 25px; width: 15%;">
+                                View
+                            </button>
+                        </div>
+                        <div class="row" style="font-size: 15px;  margin-top: 5px;">
+                            {% if book.comm== 0 %}
+                                {% for l in  mGoodData %}
+
+                                    {% if book.isbn == l['isbn'] %}
+                                        <span class="material-icons" style="margin-left:15px;">
+                            chat
+                            </span><a style="margin-left: 5px;"> Review Now |<b>
+                                        Goodbook</b> {{ l['work_reviews_count'] }}</a>
+                                    {% endif %}
+                                {% endfor %}
+                            {% else %}
+                                {% for l in  mGoodData %}
+                                    {% if book.isbn == l['isbn'] %}
+                                        <span class="material-icons" style="margin-left:15px;">
+                                chat
+                                </span><a style="margin-left: 5px;">{{ book.comm }} |<b>
+                                        Goodbook</b> {{ l['work_reviews_count'] }}</a>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+                            <a style="margin-left: auto; margin-right: 25px;">{{ book.isbn }}</a></div>
+                    </div>
+                </form>
+            </div>
+        {% else %}
+            <div class="gird-item">
+                <div class="mdc-card mdc-elevation--z0 mdc-card--outlined container-fluid"
+                     style=" width: fit-content; min-width: 20vw; margin-left: auto; margin-right: auto; border-color: transparent; color:rgb(107, 8, 8); border-radius: 2px; background-color: rgba(255, 144, 125, 0.849)!important; padding: 10px; margin: 5px;">
+                    <div class="row" style="margin-left: 5px"><b>Nothing Found </b></div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        mdc.textField.MDCTextField.attachTo(document.querySelector('.search'));
+    </script>
+{% endblock %}

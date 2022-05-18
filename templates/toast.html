@@ -1,0 +1,31 @@
+{% extends "main_template.html" %}
+
+{% block title %}
+
+    <title> @.Me | Books | {{ message_title }} </title>
+{% endblock %}
+
+{% block content %}
+
+    {% if loged == True %}
+
+        <div class="alert alert-success" role="alert">
+            Sucess ! You have logged in. <a href="{{ url_for('index') }}">Redirect to Homepage.</a>
+        </div>
+
+
+        <script>
+            setTimeout(function () {
+                window.location = "{{url_for('index')}}";
+            }, 2000);
+        </script>
+
+    {% else %}
+        <div class="alert alert-danger" role="alert">
+            Something Went WRONG
+        </div>
+
+    {% endif %}
+
+
+{% endblock %}

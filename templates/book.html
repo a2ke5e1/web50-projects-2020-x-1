@@ -1,0 +1,409 @@
+{% extends "main_template.html" %}
+
+{% block title %}
+    <title>@.Me| Books</title>
+    <style>
+
+
+        .custom-range::-webkit-slider-thumb {
+            background: rgb(107, 8, 8) !important;
+        }
+
+        .custom-range::-moz-range-thumb {
+            background: rgb(107, 8, 8) !important;
+        }
+
+        .custom-range::-ms-thumb {
+            background: rgb(107, 8, 8) !important;
+        }
+
+        .custom-range::-webkit-slider-runnable-track {
+
+            background-color: rgb(255, 110, 110) !important;
+
+        }
+
+        .myN {
+            text-align: center;
+        }
+
+
+        body {
+            margin: 40px;
+        }
+
+        .wrapper {
+            display: grid;
+            grid-gap: 1px;
+            grid-template-columns: auto auto auto;
+            background-color: #fff;
+            color: #444;
+        }
+
+        .box {
+            border-color: transparent;
+            color: rgb(107, 8, 8);
+            border-radius: 0.25rem;
+            background-color: rgba(255, 144, 125, 0.849) !important;
+            padding: 10px;
+            margin: 3px;
+            font-size: 20px;
+        }
+
+        .a {
+            grid-column: 1 / 3;
+            grid-row: 1;
+        }
+
+        .b {
+            grid-column: 3;
+            grid-row: 1 / 3;
+        }
+
+        .c {
+            grid-column: 1/3;
+            grid-row: 2;
+        }
+
+
+        .book_cards {
+            width: fit-content;
+            min-width: 20vw;
+            margin-left: auto;
+            margin-right: auto;
+            border-color: transparent;
+            color: rgb(107, 8, 8);
+            border-radius: 2px;
+            background-color: rgba(255, 144, 125, 0.849) !important;
+            padding: 10px;
+            margin: 5px;
+        }
+
+
+        .myCustom {
+            background-color: rgba(255, 144, 125, 0.5) !important;
+            color: rgb(107, 8, 8) !important;
+            border-color: rgb(107, 8, 8) !important;
+            outline: none;
+            height: 50vh !important;
+
+            -webkit-box-shadow: none !important;
+            -moz-box-shadow: none !important;
+            box-shadow: none !important;
+
+        }
+
+
+        .bootstrap-select.btn-group .dropdown-menu > li > a {
+            background-color: rgba(255, 144, 125, 0.5) !important;
+            color: rgb(107, 8, 8) !important;
+            border-color: rgb(107, 8, 8) !important;
+            outline: none;
+
+            -webkit-box-shadow: none !important;
+            -moz-box-shadow: none !important;
+            box-shadow: none !important;
+
+        }
+
+
+        @media screen and (min-width: 1000px) and (max-width: 1500px) {
+            .grid {
+                grid-template-columns: auto auto;
+            }
+
+        }
+
+        @media screen and (max-width: 1000px) {
+            .wrapper {
+                grid-template-columns: auto;
+            }
+
+            .book_cards {
+                min-width: 80%;
+            }
+
+            .myN {
+                font-size: 15px;
+            }
+
+            .a {
+                grid-column: 1;
+                grid-row: 1;
+            }
+
+            .b {
+                grid-column: 1;
+                grid-row: 2;
+            }
+
+            .c {
+                grid-column: 1;
+                grid-row: 3;
+            }
+        }
+
+
+    </style>
+{% endblock %}
+
+{% block content %}
+
+    <div style="margin-top: 20px; margin-left: 15px;" class="container-fluid">
+        <div class="row">
+            <div class="col-9">
+                <h1>@.Me | Books</h1>
+            </div>
+
+            {% if l == True %}
+                <div class="col-3">
+                    <form action="/login" style="text-align:right; margin-right: 15px;">
+                        <h6 style="margin-top: 5px; margin-right: 10px ;margin-bottom: -5px;">Welcome! {{ name }}</h6>
+                        <button class="mdc-button" style="color: red;"><span class="mdc-button__ripple"></span> Logout
+                        </button>
+                    </form>
+
+                </div>
+            {% else %}
+
+                <div class="col-3">
+                    <form action="/login" style="text-align:right; margin-right: 15px;">
+                        <h6 style="margin-top: 5px; margin-right: 10px ;margin-bottom: -5px;">Welcome! user</h6>
+                        <button class="mdc-button" style="color: red;"><span class="mdc-button__ripple"></span> Login
+                        </button>
+                    </form>
+
+                </div>
+            {% endif %}
+
+
+        </div>
+    </div>
+
+    <div class="wrapper">
+
+        {% for book in mBooks %}
+
+            <div class="box a">
+
+                <form action="{{ url_for('book_view', isbn__= book.isbn ) }}">
+
+
+                    <div class="row" style="margin-left: 5px"><b>Title </b></div>
+                    <div class="row" style="margin-left: 5px;">{{ book.title }}</div>
+
+                    <div class="row" style="margin-left: 5px"><b>Author </b></div>
+                    <div class="row" style="margin-left: 5px;">{{ book.author }}</div>
+
+                    <div class="row" style="margin-left: 5px"><b>Year Published </b></div>
+                    <div class="row" style="margin-left: 5px;">{{ book.year }}</div>
+
+                    {% if book.rate != None %}
+                        <div class="row" style="margin-left: 5px; margin-top: 30px;">
+                            <a><b>Score </b> {{ "%.2f"|format(book.rate) }}<b> | Goodbook's
+                                Score </b>{{ mGoodData['average_rating'] }}</a>
+                        </div>
+                    {% else %}
+                        <div class="row" style="margin-left: 5px; margin-top: 30px;"><a><b>Goodbook's
+                            Score </b>{{ mGoodData['average_rating'] }}</a>
+                        </div>
+                    {% endif %}
+
+
+
+                    {% if book.msg != None %}
+                        <div class="row" style="margin-left: 5px;">
+                            <span class="material-icons">
+                                chat
+                                </span><a style="margin-left: 5px;">{{ "%.2f"|format(book.comm) }}<b> |
+                            Goodbook</b> {{ mGoodData['work_reviews_count'] }}</a>
+
+                            <a style="margin-left: auto; margin-right: 25px;">{{ book.isbn }}</a></div>
+
+                    {% else %}
+                        <div class="row" style="margin-left: 5px;">
+                            <span class="material-icons">
+                                chat
+                                </span><a style="margin-left: 5px;"><b>
+                            Goodbook</b> {{ mGoodData['work_reviews_count'] }}</a>
+
+                            <a style="margin-left: auto; margin-right: 25px;">{{ book.isbn }}</a></div>
+
+                    {% endif %}
+
+
+            </div>
+
+
+            </form>
+
+
+
+        {% else %}
+            <div class="box a">
+                <div class="row" style="margin-left: 5px"><b>Nothing Found </b></div>
+
+
+            </div>
+        {% endfor %}
+
+
+        <div class="box b">
+
+            <h2>Review</h2>
+
+            {% for book in mBooks %}
+
+                {% if l == False %}
+
+                    <h4>Login In Order To Submit</h4>
+                    <form action="{{ url_for('login' ) }}" method="GET">
+
+                        <div class="form-group">
+                            <label for="score"><b>Score</b></label>
+
+
+                            <div class="container">
+                                <div class="row myN">
+                                    <input disabled type="range" class="custom-range" name="score" min="1" max="5"
+                                           id="customRange2">
+                                    <div class="col">
+
+                                        <a> Very Bad </a>
+                                    </div>
+
+                                    <div class="col">
+                                        <a>Bad</a>
+                                    </div>
+
+                                    <div class="col">
+                                        <a> Good</a>
+                                    </div>
+
+                                    <div class="col">
+
+                                        <a> Very Good</a>
+                                    </div>
+
+                                    <div class="col">
+                                        <a>Best</a>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <label for="msg"><b>Message</b></label>
+                            <textarea disabled class="form-control myCustom
+                                          " name="msg" id="msg" rows="3"></textarea>
+
+
+                            <button class=" mdc-button"
+                                    style="background-color: red; color: white; margin-left: auto; margin-right: 25px; width: 15%; margin-top: 10px;">
+                                login
+                            </button>
+
+                    </form>
+
+                    </div>
+
+                {% else %}
+                    <form action="{{ url_for('book_view', isbn__= book.isbn ) }}" method="POST">
+                        <div class="form-group">
+                            <label for="score"><b>Score</b></label>
+
+
+                            <div class="container">
+                                <div class="row myN">
+                                    <input type="range" class="custom-range" name="score" min="1" max="5"
+                                           id="customRange2">
+                                    <div class="col">
+
+                                        <a> Very Bad </a>
+                                    </div>
+
+                                    <div class="col">
+                                        <a>Bad</a>
+                                    </div>
+
+                                    <div class="col">
+                                        <a> Good</a>
+                                    </div>
+
+                                    <div class="col">
+
+                                        <a> Very Good</a>
+                                    </div>
+
+                                    <div class="col">
+                                        <a>Best</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                        <label for="msg"><b>Message</b></label>
+                        <textarea class="form-control myCustom
+                                      " name="msg" id="msg" rows="3"></textarea>
+
+
+                        <button class=" mdc-button"
+                                style="background-color: red; color: white; margin-left: auto; margin-right: 25px; width: 15%; margin-top: 10px;">
+                            Submit
+                        </button>
+
+                    </form>
+
+                {% endif %}
+            {% endfor %}
+
+    </div>
+
+
+
+    <div class="box c">
+
+        <b>Review</b><br>
+        <hr color="red">
+
+        {% for mData in mComments %}
+
+
+
+            {% if mData.username != None %}
+
+
+                <b>  {{ mData.username }}</b><br><br>
+
+            {% endif %}
+
+            {% if mData.username != None %}
+                <a><b>Score</b></a><br>
+                <a>{{ mData.score }}/5</a><br>
+            {% endif %}
+
+
+            {% if mData.username != None %}
+                <a><b>Message</b></a><br>
+                <a>{{ mData.msg }}</a><br>
+            {% endif %}
+
+            <hr color="red">
+
+        {% endfor %}
+
+    </div>
+
+
+
+
+    </div>
+
+
+
+
+
+{% endblock %}
+
+    
