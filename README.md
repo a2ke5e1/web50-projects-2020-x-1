@@ -23,15 +23,8 @@
 6. README.md
 # Requirements
 
-1. flask
-`pip3 install flask`
-2. flask-session
-`pip3 install Flask-Session`
-3. SQLAlchemy
-`pip3 install SQLALchemy`
-4. passlib (important)
-- It is used to encrypt password with sha256
-`pip3 install passlib`
+Install requirements using
+```pip install -r requirements.txt```
 
 
 
